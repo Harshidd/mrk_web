@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #0F172A;
+  --color-surface: #F8FAFC;
+  --color-surface-alt: #F1F5F9;
+  --color-dark-band: #0F172A;
+  --color-dark-band-light: #1E293B;
+  --color-accent: #0D9488;
+  --color-accent-light: #14B8A6;
+  --color-accent-muted: #5EEAD4;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+  --color-text-on-dark: #F8FAFC;
+  --color-text-on-dark-muted: #94A3B8;
+  --color-border: #E2E8F0;
+  --color-border-dark: #1E293B;
+  --color-card-bg: #FFFFFF;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@custom-variant dark (&:is(.dark *));
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    color: var(--color-text-primary);
+    position: relative;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply selection:bg-accent/20 selection:text-primary;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-text-primary);
+    letter-spacing: -0.025em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Section Stripe System ─── */
+.section-light {
+  background-color: var(--color-surface);
+}
+
+.section-white {
+  background-color: #FFFFFF;
+}
+
+.section-dark {
+  background-color: var(--color-dark-band);
+  color: var(--color-text-on-dark);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: var(--color-text-on-dark);
+}
+
+.section-dark p {
+  color: var(--color-text-on-dark-muted);
+}
+
+.section-accent-wash {
+  background: linear-gradient(180deg, #F0FDFA 0%, #F8FAFC 100%);
+}
+
+/* ─── Card System ─── */
+.card {
+  background-color: var(--color-card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+}
+
+.card-hover:hover {
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+  border-color: var(--color-border);
+}
+
+.card-dark {
+  background-color: var(--color-dark-band-light);
+  border-radius: 16px;
+  border: 1px solid var(--color-border-dark);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-dark-hover:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ─── Dashboard Mock Card ─── */
+.dashboard-card {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 20px 50px -12px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Badge ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background-color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

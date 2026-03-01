@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MRKDESIGN Center Hub
 
-## Getting Started
+Next.js (App Router) + Sanity CMS integrated application designed to look like a premium digital agency. High-performance, fully statically generated/SSR with dynamic routes.
 
-First, run the development server:
+## Local Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Rename `.env.example` to `.env.local` or `.env`.
+2. Connect or Create a Sanity Project:
+   - Run `npx sanity init` (if setting up from scratch or `npm create sanity@latest`) inside a temp folder and get your Project ID, OR
+   - Go to [sanity.io/manage](https://manage.sanity.io), create a new project.
+   - Set up CORS origins in Sanity Manage (`http://localhost:3000`).
+   - Add your `projectId` to the `.env.local`.
+   - Setup `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+3. Run `npm install`
+4. Run `npm run dev`
+5. Visit [http://localhost:3000/studio](http://localhost:3000/studio) to manage content.
+6. Visit [http://localhost:3000/](http://localhost:3000/) to see the frontend.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Push this repository to GitHub.
+2. Import project in Vercel.
+3. Ensure ENV variables are added:
+   - `NEXT_PUBLIC_SITE_URL=https://your-domain.com`
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID=your_id`
+   - `NEXT_PUBLIC_SANITY_DATASET=production`
+   - `NEXT_PUBLIC_SANITY_API_VERSION=2025-01-01`
+   - (Optional) `SANITY_API_WRITE_TOKEN=token_here` for form submissions.
+4. Deploy!
+5. In Sanity Manage, add `https://your-domain.com` to CORS Origins.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Sanity Seed Checklist
 
-## Learn More
+To populate the site for the first time, open [http://localhost:3000/studio](http://localhost:3000/studio) and create exactly:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Site Settings** (singleton instance) -> Fill out Title, Info, WhatsApp, Arrays.
+2. **Solution Categories** -> Create exactly 3. (e.g. Kurumsal Mimari, Dijital Dönüşüm, Süreç Optimizasyonu). Set order 1, 2, 3.
+3. **Projects** -> Create at least 3 featured projects. Check "Featured". Set category, cover image, and results.
+4. **Tools** -> Create 3 tools (some 'Active', some 'ComingSoon').
+5. **Posts** -> Create 3 posts. Set category.
+6. **Legal Page** -> Create exactly 1 document with the title and slug `kvkk`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Once populated, the frontend will automatically showcase this content on the homepage and respective pages.
