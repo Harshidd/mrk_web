@@ -5,49 +5,39 @@ import { client } from '@/lib/sanity/client'
 import { getSettingsQuery } from '@/lib/sanity/queries'
 import { SiteSettings } from '@/types/content'
 import { AnimatedSection, StaggerChildren, StaggerItem } from '@/components/AnimatedSection'
+import { SectionHeader } from '@/components/SectionHeader'
 import { DynamicIcon } from '@/components/DynamicIcon'
 import { Blocks } from '@/components/Blocks'
 
-export const metadata: Metadata = {
-    title: 'Hakkımda',
-    description: 'Eğitim ve yapay zekâ odaklı dijital sistem geliştiricisi.',
-    alternates: { canonical: '/hakkimda' },
-}
-
+export const metadata: Metadata = { title: 'Hakkımda', description: 'Eğitim ve yapay zekâ odaklı dijital sistem geliştiricisi.', alternates: { canonical: '/hakkimda' } }
 export const revalidate = 60
 
 export default async function AboutPage() {
     const settings: SiteSettings | null = await client.fetch(getSettingsQuery).catch(() => null)
     const about = settings?.about
 
-    if (!about) {
-        return <div className="py-24 text-center text-text-muted card mt-12 max-w-[1200px] mx-auto px-6">İçerik yakında.</div>
-    }
+    if (!about) return (
+        <section className="relative z-[1] pt-36 pb-28"><div className="section-shell"><div className="glass p-14 text-center text-muted">İçerik yakında.</div></div></section>
+    )
 
     return (
-        <section className="section-white py-24 lg:py-32 px-6">
-            <div className="max-w-[1200px] mx-auto flex flex-col gap-24">
+        <section className="relative z-[1] pt-36 pb-28 lg:pt-44 lg:pb-36">
+            <div className="section-shell flex flex-col gap-24">
                 <AnimatedSection className="max-w-3xl">
-                    <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-text-primary mb-8 leading-tight">
-                        {about.headline || 'Eğitim ve teknoloji arasında köprü kurmak'}
-                    </h1>
-                    {about.body && (
-                        <div className="text-lg text-text-secondary leading-relaxed max-w-3xl">
-                            <Blocks value={about.body} />
-                        </div>
-                    )}
+                    <SectionHeader eyebrow="Hakkımda" title={about.headline || 'Eğitim ve teknoloji arasında köprü kurmak'} />
+                    {about.body && <div className="text-lg text-muted leading-relaxed max-w-3xl"><Blocks value={about.body} /></div>}
                 </AnimatedSection>
 
                 {about.howIWorkSteps && about.howIWorkSteps.length > 0 && (
                     <AnimatedSection>
-                        <h2 className="text-2xl font-semibold tracking-tight text-text-primary mb-10">Nasıl çalışıyorum?</h2>
-                        <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {about.howIWorkSteps.map((step, idx) => (
-                                <StaggerItem key={idx}>
-                                    <div className="card p-8 h-full">
-                                        <span className="text-3xl font-light text-accent/30 block mb-5">{String(idx + 1).padStart(2, '0')}</span>
-                                        <h3 className="text-lg font-medium text-text-primary mb-3">{step.title}</h3>
-                                        <p className="text-sm text-text-secondary leading-relaxed">{step.text}</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-fg mb-10">Nasıl çalışıyorum?</h2>
+                        <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {about.howIWorkSteps.map((step, i) => (
+                                <StaggerItem key={i}>
+                                    <div className="glass p-9 h-full">
+                                        <span className="text-3xl font-light text-accent/30 block mb-5">{String(i + 1).padStart(2, '0')}</span>
+                                        <h3 className="text-base font-semibold text-fg mb-3">{step.title}</h3>
+                                        <p className="text-sm text-muted leading-relaxed">{step.text}</p>
                                     </div>
                                 </StaggerItem>
                             ))}
@@ -57,18 +47,15 @@ export default async function AboutPage() {
 
                 {about.values && about.values.length > 0 && (
                     <AnimatedSection>
-                        <h2 className="text-2xl font-semibold tracking-tight text-text-primary mb-10">Çekirdek değerler</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-fg mb-10">Çekirdek değerler</h2>
                         <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl">
-                            {about.values.map((val, idx) => (
-                                <StaggerItem key={idx}>
-                                    <div className="card p-6 h-full flex gap-5 items-start">
-                                        <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0 text-accent">
-                                            <DynamicIcon name={val.icon || 'CheckCircle'} />
+                            {about.values.map((v, i) => (
+                                <StaggerItem key={i}>
+                                    <div className="glass p-7 h-full flex gap-5 items-start">
+                                        <div className="w-11 h-11 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0 text-accent">
+                                            <DynamicIcon name={v.icon || 'CheckCircle'} />
                                         </div>
-                                        <div>
-                                            <h3 className="text-base font-medium text-text-primary mb-2">{val.title}</h3>
-                                            <p className="text-sm text-text-secondary leading-relaxed">{val.text}</p>
-                                        </div>
+                                        <div><h3 className="text-sm font-semibold text-fg mb-2">{v.title}</h3><p className="text-sm text-muted leading-relaxed">{v.text}</p></div>
                                     </div>
                                 </StaggerItem>
                             ))}
@@ -76,14 +63,9 @@ export default async function AboutPage() {
                     </AnimatedSection>
                 )}
 
-                <AnimatedSection className="pt-12 text-center max-w-2xl mx-auto border-t border-border">
-                    <h2 className="text-3xl font-semibold tracking-tight text-text-primary mb-6">Bir fikriniz varsa konuşalım.</h2>
-                    <Link
-                        href="/iletisim"
-                        className="inline-flex px-8 py-3 bg-dark-band text-white font-semibold rounded-full hover:bg-dark-band/90 hover:shadow-lg transition-all text-sm"
-                    >
-                        İletişime Geç <ArrowRight size={16} className="ml-2" />
-                    </Link>
+                <AnimatedSection className="pt-10 text-center max-w-2xl mx-auto border-t border-card-border">
+                    <h2 className="text-3xl font-bold tracking-tight text-fg mb-7">Bir fikriniz varsa konuşalım.</h2>
+                    <Link href="/iletisim" className="btn-glow px-10 py-4 text-sm">İletişime Geç <ArrowRight size={16} className="ml-1" /></Link>
                 </AnimatedSection>
             </div>
         </section>
