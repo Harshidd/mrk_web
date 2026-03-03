@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState, ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Activity, Zap, Shield, Code2, Terminal, BarChart3 } from 'lucide-react'
+import { Activity, Zap, Shield, CheckCircle2 } from 'lucide-react'
 
 /* ───────────────────────────────────────
-   Animated Counter — triggers on scroll
+   Animated Counter — count-up on scroll
    ─────────────────────────────────────── */
 function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?: string; prefix?: string }) {
     const [val, setVal] = useState(0)
@@ -36,14 +36,17 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
 
 /* ───────────────────────────────────────
    DashboardMock — Hero right-side product UI
+   
+   Designed to look like a real analytics dashboard.
+   Animated chart bars + KPI tiles + floating chip.
    ─────────────────────────────────────── */
 export function DashboardMock() {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            initial={{ opacity: 0, y: 28, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="glass p-6 md:p-8 space-y-5"
+            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="glass border-beam p-6 md:p-8 space-y-5"
             style={{ borderRadius: 28 }}
         >
             {/* Header */}
@@ -54,13 +57,13 @@ export function DashboardMock() {
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] text-subtle uppercase tracking-[0.15em] font-semibold">Ortalama Başarı</p>
-                    <p className="text-2xl font-bold text-accent metric-num">78.4<span className="text-sm text-subtle ml-0.5">%</span></p>
+                    <p className="text-3xl font-bold text-accent metric-num">78.4<span className="text-sm text-subtle ml-0.5">%</span></p>
                 </div>
             </div>
 
             {/* Chart area */}
             <div className="bg-bg/60 rounded-2xl p-5 border border-card-border">
-                <div className="flex items-end gap-[5px] h-24">
+                <div className="flex items-end gap-[5px] h-28">
                     {[45, 62, 55, 78, 68, 85, 72, 90, 82, 76, 88, 94].map((v, i) => (
                         <motion.div
                             key={i}
@@ -68,8 +71,8 @@ export function DashboardMock() {
                             initial={{ height: 0 }}
                             whileInView={{ height: `${v}%` }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.7, delay: 0.4 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-                            style={{ background: `linear-gradient(to top, rgba(13,148,136,0.35), rgba(13,148,136,0.12))` }}
+                            transition={{ duration: 0.8, delay: 0.5 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                            style={{ background: `linear-gradient(to top, rgba(13,148,136,0.4), rgba(13,148,136,0.08))` }}
                         />
                     ))}
                 </div>
@@ -96,7 +99,10 @@ export function DashboardMock() {
 }
 
 /* ───────────────────────────────────────
-   CodePanel — developer-aesthetic block
+   CodePanel — dark code window
+   
+   Line highlight animation sweeps every 6s.
+   Syntax coloring for keywords.
    ─────────────────────────────────────── */
 export function CodePanel({ lines }: { lines?: string[] }) {
     const code = lines || [
@@ -111,12 +117,20 @@ export function CodePanel({ lines }: { lines?: string[] }) {
         'console.log(`${results.length} sınav`);',
     ]
 
+    const colorize = (line: string, i: number) => {
+        if (line.startsWith('//')) return 'text-slate-500 italic'
+        if (line.includes('await') || line.includes('const')) return 'text-blue-400'
+        if (line.includes('"') || line.includes("'") || line.includes('`')) return 'text-emerald-400'
+        if (i === code.length - 1) return 'text-slate-300 cursor-blink'
+        return 'text-slate-300'
+    }
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="code-panel"
         >
             <div className="code-panel-header">
@@ -127,9 +141,9 @@ export function CodePanel({ lines }: { lines?: string[] }) {
             </div>
             <div className="p-5 overflow-x-auto">
                 {code.map((line, i) => (
-                    <div key={i} className="flex gap-4">
-                        <span className="text-slate-600 select-none w-4 text-right shrink-0">{i + 1}</span>
-                        <span className={`${line.startsWith('//') ? 'text-slate-500' : line.includes('await') || line.includes('const') ? 'text-blue-400' : 'text-slate-300'} ${i === code.length - 1 ? 'cursor-blink' : ''}`}>
+                    <div key={i} className={`flex gap-4 ${i === 1 ? 'code-line-highlight' : ''}`}>
+                        <span className="text-slate-600 select-none w-4 text-right shrink-0 text-[11px]">{i + 1}</span>
+                        <span className={colorize(line, i)}>
                             {line || '\u00A0'}
                         </span>
                     </div>
@@ -151,7 +165,7 @@ export function MetricStrip() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
@@ -179,47 +193,47 @@ export function MetricStrip() {
 }
 
 /* ───────────────────────────────────────
-   WorkflowStrip — process steps
+   WorkflowStrip — 4-step pipeline
    ─────────────────────────────────────── */
 export function WorkflowStrip() {
     const steps = [
-        { label: 'Problem', desc: 'Sahadan veri toplama' },
-        { label: 'Veri', desc: 'Optik okuma + analiz' },
-        { label: 'Yapay Zekâ', desc: 'Desen tanıma' },
-        { label: 'Çıktı', desc: 'Raporlar ve içgörü' },
+        { num: '01', label: 'Problem', desc: 'Sahadan veri toplama', active: false },
+        { num: '02', label: 'Veri', desc: 'Optik okuma + analiz', active: false },
+        { num: '03', label: 'Yapay Zekâ', desc: 'Desen tanıma', active: false },
+        { num: '04', label: 'Çıktı', desc: 'Raporlar ve içgörü', active: true },
     ]
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="glass p-6"
         >
-            <span className="text-[10px] font-semibold text-subtle uppercase tracking-[0.15em] mb-5 block">İş Akışı</span>
+            <span className="text-[10px] font-semibold text-subtle uppercase tracking-[0.15em] mb-6 block">İş Akışı</span>
             <div className="flex items-start gap-0">
                 {steps.map((s, i) => (
                     <motion.div
                         key={i}
                         className="flex-1 relative"
-                        initial={{ opacity: 0, x: -8 }}
+                        initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 + i * 0.12, duration: 0.5 }}
                     >
                         <div className="flex flex-col items-center text-center">
-                            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold mb-2 ${i === steps.length - 1
-                                    ? 'bg-accent text-white'
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold mb-2 transition-all ${s.active
+                                    ? 'bg-accent text-white shadow-lg shadow-accent/20'
                                     : 'bg-surface border border-card-border text-muted'
                                 }`}>
-                                {i + 1}
+                                {s.active ? <CheckCircle2 size={16} /> : s.num}
                             </div>
                             <span className="text-[11px] font-semibold text-fg">{s.label}</span>
-                            <span className="text-[9px] text-subtle mt-0.5 leading-tight">{s.desc}</span>
+                            <span className="text-[9px] text-subtle mt-0.5 leading-tight max-w-[80px]">{s.desc}</span>
                         </div>
                         {i < steps.length - 1 && (
-                            <div className="absolute top-4 left-[calc(50%+18px)] w-[calc(100%-36px)] h-px bg-card-border" />
+                            <div className="absolute top-5 left-[calc(50%+20px)] w-[calc(100%-40px)] h-px bg-card-border" />
                         )}
                     </motion.div>
                 ))}

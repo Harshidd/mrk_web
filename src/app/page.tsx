@@ -30,24 +30,23 @@ export default async function Home() {
 
   return (
     <>
-      {/* ════════════ SECTION 1: HERO (split) ════════════ */}
-      <section className="relative z-[1] pt-36 pb-24 lg:pt-44 lg:pb-32">
+      {/* ═══════════ SECTION 0: HERO (copy LEFT, DashboardMock RIGHT) ═══════════ */}
+      <section className="relative z-[1] pt-40 pb-28 lg:pt-48 lg:pb-36">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            {/* Left — Copy */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <AnimatedSection>
               <div className="badge-pill mb-8">
                 <span className="badge-dot" />
                 Eğitim + Yapay Zekâ
               </div>
-              <h1 className="text-4xl md:text-[3.25rem] lg:text-[3.75rem] font-bold tracking-tight text-fg leading-[1.06] mb-7">
+              <h1 className="text-4xl md:text-[3.5rem] lg:text-[4rem] font-bold tracking-[-0.035em] text-fg leading-[1.04] mb-8">
                 {settings?.homeHero?.headline || 'Eğitim ve yapay zekâ odaklı sistemler'}
               </h1>
-              <p className="text-lg md:text-xl text-muted leading-relaxed mb-10 max-w-xl">
+              <p className="text-lg md:text-xl text-muted leading-relaxed mb-12 max-w-lg">
                 {settings?.homeHero?.subheadline || 'Eğitim kurumlarında karşılaşılan karmaşayı sadeleştiren, veriye dayalı ve gerçekten işe yarayan dijital çözümler.'}
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <Link href={settings?.homeHero?.primaryCtaUrl || '/projeler'} className="btn-glow px-8 py-3.5 text-sm">
+                <Link href={settings?.homeHero?.primaryCtaUrl || '/projeler'} className="btn-glow px-8 py-4 text-sm">
                   {settings?.homeHero?.primaryCtaLabel || 'Projeleri İncele'}
                 </Link>
                 <Link href={settings?.homeHero?.secondaryCtaUrl || '/iletisim'} className="btn-ghost group text-sm">
@@ -57,10 +56,9 @@ export default async function Home() {
               </div>
             </AnimatedSection>
 
-            {/* Right — Dashboard Mock */}
             <div className="relative">
               <DashboardMock />
-              <div className="absolute -bottom-5 -left-4 glass p-3.5 px-5 hidden lg:flex items-center gap-3" style={{ borderRadius: 16 }}>
+              <div className="absolute -bottom-6 -left-4 glass p-3.5 px-5 hidden lg:flex items-center gap-3" style={{ borderRadius: 16 }}>
                 <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                   <CheckCircle2 size={16} />
                 </div>
@@ -74,17 +72,19 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ════════════ SECTION 2: Eğitim Teknolojileri (copy LEFT, showcase RIGHT) ════════════ */}
-      <section className="relative z-[1] py-24 lg:py-32">
+      <div className="section-divider" />
+
+      {/* ═══════════ SECTION 1: Eğitim Teknolojileri (copy LEFT, CodePanel RIGHT) ═══════════ */}
+      <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <AnimatedSection>
               <SectionHeader
                 eyebrow="Uzmanlık"
                 title="Eğitim Teknolojileri"
                 subtitle="Sınavlardan veri toplama, bu veriyi anlamlı raporlara dönüştürme ve öğrenci gelişimini izlenebilir kılma."
               />
-              <div className="space-y-3 mb-8">
+              <div className="space-y-4 mb-10">
                 {(categories.length > 0
                   ? categories.slice(0, 3).map(c => ({ title: c.title, desc: c.shortSummary }))
                   : [
@@ -114,17 +114,19 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ════════════ SECTION 3: Araçlar (showcase LEFT, copy RIGHT) ════════════ */}
-      <section className="relative z-[1] py-24 lg:py-32">
+      <div className="section-divider" />
+
+      {/* ═══════════ SECTION 2: Araçlar (WorkflowStrip+Metrics LEFT, copy RIGHT) — ZIGZAG ═══════════ */}
+      <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <AnimatedSection className="lg:order-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <AnimatedSection delay={0.15} className="lg:order-2">
               <SectionHeader
                 eyebrow="Araçlar"
                 title="Öğretmen ve Geliştirici Araçları"
                 subtitle="Günlük operasyonları hızlandıran, tek bir işi iyi yapan, odaklı ve pratik araçlar."
               />
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-10">
                 {(homeTools.length > 0
                   ? homeTools.map(t => ({ title: t.title, desc: t.summary, status: t.status }))
                   : [
@@ -134,13 +136,13 @@ export default async function Home() {
                   ]
                 ).map((item, i) => (
                   <div key={i} className="glass glass-interactive border-beam p-5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-                      {i === 0 ? <FileCode2 size={17} /> : i === 1 ? <Layers size={17} /> : <BookOpen size={17} />}
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                      {i === 0 ? <FileCode2 size={18} /> : i === 1 ? <Layers size={18} /> : <BookOpen size={18} />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-0.5">
                         <h3 className="text-sm font-semibold text-fg truncate">{item.title}</h3>
-                        <span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold shrink-0 ml-2 ${item.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-surface text-subtle'}`}>
+                        <span className={`text-[9px] px-2.5 py-0.5 rounded-full font-semibold shrink-0 ml-2 ${item.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-surface text-subtle border border-card-border'}`}>
                           {item.status === 'Active' ? 'Aktif' : 'Yakında'}
                         </span>
                       </div>
@@ -154,7 +156,7 @@ export default async function Home() {
               </Link>
             </AnimatedSection>
 
-            <AnimatedSection delay={0.15} className="lg:order-1 space-y-4">
+            <AnimatedSection delay={0.1} className="lg:order-1 space-y-5">
               <MetricStrip />
               <WorkflowStrip />
             </AnimatedSection>
@@ -162,8 +164,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ════════════ SECTION 4: Projeler (bento grid) ════════════ */}
-      <section className="relative z-[1] py-24 lg:py-32">
+      <div className="section-divider" />
+
+      {/* ═══════════ SECTION 3: Projeler (bento grid) ═══════════ */}
+      <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
           <AnimatedSection>
             <SectionHeader
@@ -196,7 +200,7 @@ export default async function Home() {
                       <span className="text-[10px] text-accent font-bold tracking-[0.12em] mb-2 uppercase">{p.cat}</span>
                       <h3 className="text-base font-semibold text-fg mb-2">{p.title}</h3>
                       <p className="text-sm text-muted line-clamp-2 flex-1">{p.summary}</p>
-                      <div className="text-xs text-subtle mt-5 pt-4 border-t border-card-border flex items-center justify-between group-hover:text-muted transition-colors">
+                      <div className="text-xs text-subtle mt-6 pt-4 border-t border-card-border flex items-center justify-between group-hover:text-muted transition-colors">
                         Detayları gör <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
@@ -208,7 +212,7 @@ export default async function Home() {
                     <h3 className="text-base font-semibold text-fg mb-2">{p.title}</h3>
                     <div className="skeleton h-3 w-full mb-1.5" />
                     <div className="skeleton h-3 w-3/4" />
-                    <div className="text-xs text-subtle mt-5 pt-4 border-t border-card-border flex items-center justify-between">
+                    <div className="text-xs text-subtle mt-6 pt-4 border-t border-card-border flex items-center justify-between">
                       Detayları gör <ArrowRight size={12} />
                     </div>
                   </div>
@@ -219,8 +223,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ════════════ SECTION 5: Yazılar ════════════ */}
-      <section className="relative z-[1] py-24 lg:py-32">
+      <div className="section-divider" />
+
+      {/* ═══════════ SECTION 4: Yazılar ═══════════ */}
+      <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
           <AnimatedSection>
             <SectionHeader
@@ -278,18 +284,20 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ════════════ SECTION 6: Final CTA ════════════ */}
-      <section className="relative z-[1] py-24 lg:py-32">
+      <div className="section-divider" />
+
+      {/* ═══════════ FINAL CTA ═══════════ */}
+      <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
           <AnimatedSection>
-            <div className="glass p-12 md:p-16 text-center max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-[2.5rem] font-bold tracking-tight text-fg mb-6 leading-tight">
+            <div className="glass p-14 md:p-20 text-center max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-[2.75rem] font-bold tracking-[-0.03em] text-fg mb-7 leading-tight">
                 Bir fikriniz varsa konuşalım.
               </h2>
-              <p className="text-muted mb-8 max-w-lg mx-auto">
-                Dijital mimari, eğitim teknolojileri veya yapay zekâ projeleri hakkında konuşmak isterseniz.
+              <p className="text-muted mb-10 max-w-md mx-auto leading-relaxed">
+                Dijital mimari, eğitim teknolojileri veya yapay zekâ projeleri hakkında sohbet etmek isterseniz.
               </p>
-              <Link href="/iletisim" className="btn-glow px-10 py-4 text-sm">
+              <Link href="/iletisim" className="btn-glow px-12 py-4 text-sm">
                 İletişime Geç
               </Link>
             </div>
