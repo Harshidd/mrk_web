@@ -2,32 +2,48 @@
 
 import { ReactNode, useEffect, useRef } from 'react'
 
+/**
+ * Wraps the entire app. Renders mesh gradient blobs, noise, and dot grid.
+ * Pointer parallax moves the actual mesh layer (up to 12px) for a living feel.
+ */
 export function AuroraBackground({ children }: { children: ReactNode }) {
-    const ref = useRef<HTMLDivElement>(null)
+    const meshRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        // Pointer parallax — very subtle aurora shift
-        const el = ref.current
+        const el = meshRef.current
         if (!el) return
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        if (prefersReducedMotion) return
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+        if (mq.matches) return
 
-        const handleMove = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 8
-            const y = (e.clientY / window.innerHeight - 0.5) * 8
-            const before = el.querySelector('.aurora-parallax') as HTMLElement | null
-            if (before) {
-                before.style.transform = `translate(${x}px, ${y}px)`
-            }
+        let rafId: number
+        let targetX = 0, targetY = 0, curX = 0, curY = 0
+
+        const onMove = (e: MouseEvent) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 12
+            targetY = (e.clientY / window.innerHeight - 0.5) * 12
         }
-        window.addEventListener('mousemove', handleMove, { passive: true })
-        return () => window.removeEventListener('mousemove', handleMove)
+
+        const lerp = () => {
+            curX += (targetX - curX) * 0.04
+            curY += (targetY - curY) * 0.04
+            el.style.transform = `translate(${curX}px, ${curY}px)`
+            rafId = requestAnimationFrame(lerp)
+        }
+
+        window.addEventListener('mousemove', onMove, { passive: true })
+        rafId = requestAnimationFrame(lerp)
+
+        return () => {
+            window.removeEventListener('mousemove', onMove)
+            cancelAnimationFrame(rafId)
+        }
     }, [])
 
     return (
-        <div ref={ref} className="aurora-bg">
-            <div className="aurora-parallax fixed inset-0 z-0 pointer-events-none transition-transform duration-[2000ms] ease-out" />
-            <div className="aurora-grid" />
+        <div className="mesh-bg">
+            <div ref={meshRef} className="mesh-layer" />
+            <div className="mesh-noise" />
+            <div className="mesh-dots" />
             {children}
         </div>
     )
