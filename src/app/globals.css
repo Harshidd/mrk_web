@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════
-   MRKDESIGN — V3 DESIGN SYSTEM (Stripe × Apple)
+   MRKDESIGN — V3.5 DESIGN SYSTEM (Stripe × Apple, Light)
    ═══════════════════════════════════════════════════════════
 
-   10 KNOBS — search by name to tune:
+   CSS KNOBS — tune to taste:
 
-   --mesh-deep       Layer 1 opacity (big soft fields)     0.06–0.12
-   --mesh-mid        Layer 2 opacity (mid bright blobs)    0.08–0.18
-   --mesh-top        Layer 3 opacity (small accents)       0.06–0.14
-   --mesh-speed-a    Layer 1 drift cycle                   40s–80s
-   --mesh-speed-b    Layer 2 drift cycle                   28s–55s
-   --noise-op        Grain texture                         0.02–0.07
-   --grid-op         Dot grid                              0.015–0.04
-   --card-blur       Glass frosting px                     18–32
-   --card-bg         Card fill alpha                       0.6–0.82
-   --shadow-a        Card shadow multiplier                0.06–0.18
+   --mesh-opacity     Gradient blob intensity              0.06–0.18
+   --mesh-speed-a     Deep layer drift cycle               40s–90s
+   --mesh-speed-b     Mid layer drift cycle                25s–55s
+   --noise-opacity    Grain texture                        0.02–0.07
+   --dot-opacity      Grid dots                            0.01–0.04
+   --spotlight-size   Pointer spotlight radius              400–800
+   --spotlight-alpha  Pointer spotlight opacity             0.04–0.12
+   --card-blur        Glass frosting (px)                   18–32
+   --card-bg          Card fill alpha                       0.60–0.82
+   --shadow-alpha     Card shadow multiplier                0.06–0.18
    ═══════════════════════════════════════════════════════════ */
 
 @theme {
@@ -51,16 +51,16 @@
 
 /* ═══════════════════ KNOBS ═══════════════════ */
 :root {
-  --mesh-deep: 0.09;
-  --mesh-mid: 0.14;
-  --mesh-top: 0.10;
-  --mesh-speed-a: 55s;
-  --mesh-speed-b: 34s;
-  --noise-op: 0.045;
-  --grid-op: 0.025;
+  --mesh-opacity: 0.12;
+  --mesh-speed-a: 60s;
+  --mesh-speed-b: 38s;
+  --noise-opacity: 0.04;
+  --dot-opacity: 0.022;
+  --spotlight-size: 550;
+  --spotlight-alpha: 0.07;
   --card-blur: 24;
   --card-bg: 0.68;
-  --shadow-a: 0.11;
+  --shadow-alpha: 0.11;
 }
 
 /* ═══════════════════ BASE ═══════════════════ */
@@ -75,7 +75,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    @apply selection:bg-accent/20 selection:text-fg;
+  }
+
+  ::selection {
+    background: rgba(13, 148, 136, 0.15);
   }
 
   h1,
@@ -89,79 +92,89 @@
     line-height: 1.08;
     font-weight: 700;
   }
-
-  ::selection {
-    background: rgba(13, 148, 136, 0.15);
-  }
 }
 
 /* ═══════════════════════════════════════════════════════
-   MULTI-LAYER MESH GRADIENT — "LIVING BACKGROUND"
+   AURORA FIELD — MULTI-LAYER BACKGROUND ENGINE
 
-   3 layers each at different z-depth + drift speed.
-   Layer 1: 2 huge ultra-soft fields (immersive wash)
-   Layer 2: 3 brighter mid-size blobs (color interest)
-   Layer 3: vignette for edge focus (subtle)
+   Layer 1 (deep) : 2 huge soft washes — slow drift
+   Layer 2 (mid)  : 3 bright blobs    — faster drift
+   Spotlight      : radial gradient following pointer
+   Vignette       : edge focus
+   + noise + dot grid
    ═══════════════════════════════════════════════════════ */
-.mesh-root {
+.aurora-root {
   position: relative;
   min-height: 100vh;
   background: var(--color-bg);
   isolation: isolate;
 }
 
-/* Layer 1 — Deep wash (2 huge soft fields) */
-.mesh-deep {
+/* Deep wash layer */
+.aurora-deep {
   position: fixed;
   inset: -200px;
   z-index: -3;
   pointer-events: none;
   filter: blur(120px);
-  opacity: 1;
   will-change: transform;
   transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mesh-deep::before {
+.aurora-deep::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
     radial-gradient(ellipse 90% 70% at 12% 20%,
-      rgba(59, 130, 246, var(--mesh-deep)), transparent 70%),
+      rgba(59, 130, 246, var(--mesh-opacity)), transparent 70%),
     radial-gradient(ellipse 80% 60% at 85% 75%,
-      rgba(139, 92, 246, var(--mesh-deep)), transparent 70%);
-  animation: drift-a var(--mesh-speed-a) ease-in-out infinite alternate;
+      rgba(139, 92, 246, var(--mesh-opacity)), transparent 70%);
+  animation: drift-deep var(--mesh-speed-a) ease-in-out infinite alternate;
 }
 
-/* Layer 2 — Mid blobs (3 brighter, more movement) */
-.mesh-mid {
+/* Mid blobs layer */
+.aurora-mid {
   position: fixed;
   inset: -100px;
   z-index: -2;
   pointer-events: none;
   filter: blur(80px);
-  opacity: 1;
   will-change: transform;
   transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mesh-mid::before {
+.aurora-mid::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
     radial-gradient(circle 520px at 18% 35%,
-      rgba(20, 184, 166, var(--mesh-mid)), transparent),
+      rgba(20, 184, 166, var(--mesh-opacity)), transparent),
     radial-gradient(circle 420px at 78% 25%,
-      rgba(244, 114, 182, calc(var(--mesh-mid)*0.7)), transparent),
+      rgba(244, 114, 182, calc(var(--mesh-opacity)*0.65)), transparent),
     radial-gradient(circle 380px at 55% 70%,
-      rgba(251, 191, 36, calc(var(--mesh-mid)*0.5)), transparent);
-  animation: drift-b var(--mesh-speed-b) ease-in-out infinite alternate;
+      rgba(251, 191, 36, calc(var(--mesh-opacity)*0.45)), transparent);
+  animation: drift-mid var(--mesh-speed-b) ease-in-out infinite alternate;
 }
 
-/* Layer 3 — Vignette (edge darkening for focus) */
-.mesh-vignette {
+/* Pointer spotlight — positioned via JS */
+.aurora-spotlight {
+  position: fixed;
+  width: calc(var(--spotlight-size) * 1px);
+  height: calc(var(--spotlight-size) * 1px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, var(--spotlight-alpha)) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(60px);
+  will-change: left, top;
+  transition: opacity 0.6s ease;
+}
+
+/* Vignette */
+.aurora-vignette {
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -170,12 +183,12 @@
 }
 
 /* Noise grain */
-.mesh-noise {
+.aurora-noise {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: var(--noise-op);
+  opacity: var(--noise-opacity);
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
@@ -183,24 +196,24 @@
 }
 
 /* Dot grid */
-.mesh-dots {
+.aurora-dots {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: var(--grid-op);
+  opacity: var(--dot-opacity);
   background-image: radial-gradient(circle, rgba(15, 23, 42, 0.45) 0.7px, transparent 0.7px);
   background-size: 24px 24px;
 }
 
-/* ── Drift keyframes ── */
-@keyframes drift-a {
+/* Drift keyframes — actual translation for travel */
+@keyframes drift-deep {
   0% {
     transform: translate(0, 0) scale(1);
   }
 
   33% {
-    transform: translate(60px, -30px) scale(1.04);
+    transform: translate(60px, -30px) scale(1.03);
   }
 
   66% {
@@ -212,13 +225,13 @@
   }
 }
 
-@keyframes drift-b {
+@keyframes drift-mid {
   0% {
     transform: translate(0, 0) scale(1);
   }
 
   25% {
-    transform: translate(-50px, 40px) scale(1.06);
+    transform: translate(-50px, 40px) scale(1.05);
   }
 
   50% {
@@ -234,24 +247,69 @@
   }
 }
 
-/* Backward-compat wrappers */
+/* Section-local glow — add data-glow="blue|teal|violet|pink" to any section */
+.section-glow {
+  position: relative;
+}
+
+.section-glow::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-glow[data-glow="blue"]::before {
+  background: rgba(59, 130, 246, 1);
+  top: -100px;
+  right: -100px;
+}
+
+.section-glow[data-glow="teal"]::before {
+  background: rgba(20, 184, 166, 1);
+  top: -80px;
+  left: -80px;
+}
+
+.section-glow[data-glow="violet"]::before {
+  background: rgba(139, 92, 246, 1);
+  bottom: -80px;
+  right: -60px;
+}
+
+.section-glow[data-glow="pink"]::before {
+  background: rgba(244, 114, 182, 1);
+  bottom: -100px;
+  left: -80px;
+}
+
+.section-glow[data-glow="amber"]::before {
+  background: rgba(251, 191, 36, 1);
+  top: 50%;
+  left: -100px;
+}
+
+/* Backward compat */
+.mesh-root,
+.mesh-bg,
 .aurora-bg {
   position: relative;
   min-height: 100vh;
   background: var(--color-bg);
 }
 
-.mesh-bg {
-  position: relative;
-  min-height: 100vh;
-  background: var(--color-bg);
-}
-
-.aurora-grid {
-  display: none;
-}
-
-.mesh-layer {
+.aurora-grid,
+.mesh-layer,
+.mesh-deep,
+.mesh-mid,
+.mesh-vignette,
+.mesh-noise,
+.mesh-dots {
   display: none;
 }
 
@@ -280,10 +338,10 @@
 }
 
 /* ═══════════════════════════════════════════════════════
-   GLASS CARD — canonical floating card
+   GLASS CARD — floating card with premium depth
 
-   4-layer shadow: inset highlight + crisp + medium + wide.
-   Top edge inner glow simulates light catching.
+   4-layer shadow: top-edge highlight + crisp + medium + wide
+   Hover: lift + shadow deepen + beam reveal
    ═══════════════════════════════════════════════════════ */
 .glass {
   background: rgba(255, 255, 255, var(--card-bg));
@@ -292,13 +350,13 @@
   border: 1px solid var(--color-card-border);
   border-radius: 22px;
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.65),
     0 1px 2px rgba(15, 23, 42, 0.04),
-    0 4px 16px rgba(15, 23, 42, calc(var(--shadow-a)*0.5)),
-    0 24px 60px rgba(15, 23, 42, var(--shadow-a));
+    0 4px 16px rgba(15, 23, 42, calc(var(--shadow-alpha)*0.5)),
+    0 24px 60px rgba(15, 23, 42, var(--shadow-alpha));
   transition:
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.4s ease;
   will-change: transform, box-shadow;
   position: relative;
@@ -312,13 +370,14 @@
 .glass-interactive:hover {
   transform: translateY(-3px) scale(1.012);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.75),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
     0 2px 4px rgba(15, 23, 42, 0.06),
-    0 10px 28px rgba(15, 23, 42, calc(var(--shadow-a)*0.7)),
-    0 36px 80px rgba(15, 23, 42, calc(var(--shadow-a)*1.4));
+    0 10px 28px rgba(15, 23, 42, calc(var(--shadow-alpha)*0.7)),
+    0 36px 80px rgba(15, 23, 42, calc(var(--shadow-alpha)*1.4));
   border-color: rgba(2, 6, 23, 0.13);
 }
 
+/* Compat alias */
 .floating-card {
   background: rgba(255, 255, 255, var(--card-bg));
   backdrop-filter: blur(calc(var(--card-blur) * 1px));
@@ -326,11 +385,11 @@
   border: 1px solid var(--color-card-border);
   border-radius: 22px;
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.65),
     0 1px 2px rgba(15, 23, 42, 0.04),
-    0 4px 16px rgba(15, 23, 42, calc(var(--shadow-a)*0.5)),
-    0 24px 60px rgba(15, 23, 42, var(--shadow-a));
-  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    0 4px 16px rgba(15, 23, 42, calc(var(--shadow-alpha)*0.5)),
+    0 24px 60px rgba(15, 23, 42, var(--shadow-alpha));
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
@@ -338,14 +397,14 @@
 .floating-card-hover:hover {
   transform: translateY(-3px) scale(1.012);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.75),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
     0 2px 4px rgba(15, 23, 42, 0.06),
-    0 10px 28px rgba(15, 23, 42, calc(var(--shadow-a)*0.7)),
-    0 36px 80px rgba(15, 23, 42, calc(var(--shadow-a)*1.4));
+    0 10px 28px rgba(15, 23, 42, calc(var(--shadow-alpha)*0.7)),
+    0 36px 80px rgba(15, 23, 42, calc(var(--shadow-alpha)*1.4));
   border-color: rgba(2, 6, 23, 0.13);
 }
 
-/* ── Border Beam (hover-only conic stroke) ── */
+/* ── Border Beam ── */
 .border-beam {
   position: relative;
 }
@@ -358,9 +417,9 @@
   padding: 1px;
   background: conic-gradient(from var(--beam-angle, 0deg),
       transparent 48%,
-      rgba(59, 130, 246, 0.24) 65%,
-      rgba(139, 92, 246, 0.20) 76%,
-      rgba(20, 184, 166, 0.16) 87%,
+      rgba(59, 130, 246, 0.22) 65%,
+      rgba(139, 92, 246, 0.18) 76%,
+      rgba(20, 184, 166, 0.14) 87%,
       transparent 100%);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -459,10 +518,7 @@
 
 .btn-glow:hover {
   transform: translateY(-1px) scale(1.02);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.10),
-    0 10px 32px rgba(15, 23, 42, 0.30),
-    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10), 0 10px 32px rgba(15, 23, 42, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
 
 .btn-glow:active {
@@ -616,6 +672,15 @@
   }
 }
 
+/* ═══════════════════ SECTION DIVIDER ═══════════════════ */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent, rgba(2, 6, 23, 0.06) 20%, rgba(2, 6, 23, 0.06) 80%, transparent);
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
 /* ═══════════════════ CODE PANEL ═══════════════════ */
 .code-panel {
   background: #0F172A;
@@ -626,9 +691,7 @@
   font-size: 12.5px;
   line-height: 1.85;
   overflow: hidden;
-  box-shadow:
-    0 4px 16px rgba(15, 23, 42, 0.15),
-    0 24px 56px rgba(15, 23, 42, 0.22);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15), 0 24px 56px rgba(15, 23, 42, 0.22);
 }
 
 .code-panel-header {
@@ -658,7 +721,6 @@
   background: #22C55E;
 }
 
-/* Line highlight sweep */
 .code-line-highlight {
   position: relative;
 }
@@ -712,15 +774,6 @@
   font-feature-settings: 'tnum';
 }
 
-/* ═══════════════════ SECTION DIVIDER ═══════════════════ */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg,
-      transparent, rgba(2, 6, 23, 0.06) 20%, rgba(2, 6, 23, 0.06) 80%, transparent);
-  margin: 0 auto;
-  max-width: 1000px;
-}
-
 /* ═══════════════════ FOOTER ═══════════════════ */
 .footer-glass {
   position: relative;
@@ -742,13 +795,17 @@
     transition-duration: 0.01ms !important;
   }
 
-  .mesh-deep,
-  .mesh-mid {
+  .aurora-deep,
+  .aurora-mid {
     animation: none !important;
   }
 
-  .mesh-deep::before,
-  .mesh-mid::before {
+  .aurora-deep::before,
+  .aurora-mid::before {
     animation: none !important;
+  }
+
+  .aurora-spotlight {
+    display: none !important;
   }
 }

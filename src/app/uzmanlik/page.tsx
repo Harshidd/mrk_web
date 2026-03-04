@@ -18,7 +18,7 @@ export default async function SolutionsPage() {
     const categories: SolutionCategory[] = await client.fetch(listCategoriesQuery).catch(() => [])
 
     return (
-        <section className="relative z-[1] pt-40 pb-28 lg:pt-48 lg:pb-36">
+        <section className="section-glow relative z-[1] pt-40 pb-28 lg:pt-48 lg:pb-36" data-glow="teal">
             <div className="section-shell">
                 {/* Split hero: copy LEFT, CodePanel RIGHT */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center mb-20 lg:mb-28">

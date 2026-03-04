@@ -30,8 +30,8 @@ export default async function Home() {
 
   return (
     <>
-      {/* ═══════════ SECTION 0: HERO (copy LEFT, DashboardMock RIGHT) ═══════════ */}
-      <section className="relative z-[1] pt-40 pb-28 lg:pt-48 lg:pb-36">
+      {/* ═══════ S0: HERO (copy LEFT, DashboardMock RIGHT) — glow: blue ═══════ */}
+      <section className="section-glow relative z-[1] pt-40 pb-28 lg:pt-48 lg:pb-36" data-glow="blue">
         <div className="section-shell">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <AnimatedSection>
@@ -51,7 +51,7 @@ export default async function Home() {
                 </Link>
                 <Link href={settings?.homeHero?.secondaryCtaUrl || '/iletisim'} className="btn-ghost group text-sm">
                   {settings?.homeHero?.secondaryCtaLabel || 'İletişime Geç'}
-                  <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </AnimatedSection>
@@ -74,8 +74,8 @@ export default async function Home() {
 
       <div className="section-divider" />
 
-      {/* ═══════════ SECTION 1: Eğitim Teknolojileri (copy LEFT, CodePanel RIGHT) ═══════════ */}
-      <section className="relative z-[1] py-28 lg:py-36">
+      {/* ═══════ S1: Eğitim Teknolojileri (copy LEFT, CodePanel RIGHT) — glow: teal ═══════ */}
+      <section className="section-glow relative z-[1] py-28 lg:py-36" data-glow="teal">
         <div className="section-shell">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <AnimatedSection>
@@ -103,7 +103,7 @@ export default async function Home() {
                 ))}
               </div>
               <Link href="/uzmanlik" className="btn-ghost group text-sm">
-                Detayları incele <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+                Detayları incele <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </AnimatedSection>
 
@@ -116,8 +116,8 @@ export default async function Home() {
 
       <div className="section-divider" />
 
-      {/* ═══════════ SECTION 2: Araçlar (WorkflowStrip+Metrics LEFT, copy RIGHT) — ZIGZAG ═══════════ */}
-      <section className="relative z-[1] py-28 lg:py-36">
+      {/* ═══════ S2: Araçlar (showcase LEFT, copy RIGHT) — glow: violet — ZIGZAG ═══════ */}
+      <section className="section-glow relative z-[1] py-28 lg:py-36" data-glow="violet">
         <div className="section-shell">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <AnimatedSection delay={0.15} className="lg:order-2">
@@ -152,7 +152,7 @@ export default async function Home() {
                 ))}
               </div>
               <Link href="/araclar" className="btn-ghost group text-sm">
-                Tümünü gör <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+                Tümünü gör <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </AnimatedSection>
 
@@ -166,14 +166,14 @@ export default async function Home() {
 
       <div className="section-divider" />
 
-      {/* ═══════════ SECTION 3: Projeler (bento grid) ═══════════ */}
-      <section className="relative z-[1] py-28 lg:py-36">
+      {/* ═══════ S3: Projeler (bento grid) — glow: pink ═══════ */}
+      <section className="section-glow relative z-[1] py-28 lg:py-36" data-glow="pink">
         <div className="section-shell">
           <AnimatedSection>
             <SectionHeader
               eyebrow="Projeler" title="Projeler"
               subtitle="Gerçek problemlerden doğan, sahada test edilmiş dijital sistemler."
-              action={<Link href="/projeler" className="btn-ghost group text-sm">Tüm projeler <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" /></Link>}
+              action={<Link href="/projeler" className="btn-ghost group text-sm">Tüm projeler <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" /></Link>}
             />
           </AnimatedSection>
 
@@ -201,20 +201,23 @@ export default async function Home() {
                       <h3 className="text-base font-semibold text-fg mb-2">{p.title}</h3>
                       <p className="text-sm text-muted line-clamp-2 flex-1">{p.summary}</p>
                       <div className="text-xs text-subtle mt-6 pt-4 border-t border-card-border flex items-center justify-between group-hover:text-muted transition-colors">
-                        Detayları gör <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                        Detayları gör <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
                   </Link>
                 ) : (
+                  /* Premium skeleton state — compact, not giant blank */
                   <div className="glass p-5 h-full flex flex-col">
-                    <div className="skeleton aspect-[16/10] w-full mb-5 rounded-xl" />
+                    <div className="aspect-[16/10] rounded-xl mb-5 bg-surface/40 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-surface/70 skeleton" />
+                    </div>
                     <span className="text-[10px] text-accent font-bold tracking-[0.12em] mb-2 uppercase">{p.cat}</span>
                     <h3 className="text-base font-semibold text-fg mb-2">{p.title}</h3>
-                    <div className="skeleton h-3 w-full mb-1.5" />
-                    <div className="skeleton h-3 w-3/4" />
-                    <div className="text-xs text-subtle mt-6 pt-4 border-t border-card-border flex items-center justify-between">
-                      Detayları gör <ArrowRight size={12} />
+                    <div className="space-y-1.5 flex-1">
+                      <div className="skeleton h-3 w-full" />
+                      <div className="skeleton h-3 w-3/4" />
                     </div>
+                    <div className="text-xs text-subtle mt-6 pt-4 border-t border-card-border">Detayları gör</div>
                   </div>
                 )}
               </StaggerItem>
@@ -225,14 +228,14 @@ export default async function Home() {
 
       <div className="section-divider" />
 
-      {/* ═══════════ SECTION 4: Yazılar ═══════════ */}
-      <section className="relative z-[1] py-28 lg:py-36">
+      {/* ═══════ S4: Yazılar — glow: amber ═══════ */}
+      <section className="section-glow relative z-[1] py-28 lg:py-36" data-glow="amber">
         <div className="section-shell">
           <AnimatedSection>
             <SectionHeader
               eyebrow="Blog" title="Yazılar"
               subtitle="Eğitim teknolojileri, yapay zekâ ve dijital süreçler üzerine içgörüler."
-              action={<Link href="/yazilar" className="btn-ghost group text-sm">Tümünü oku <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" /></Link>}
+              action={<Link href="/yazilar" className="btn-ghost group text-sm">Tümünü oku <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" /></Link>}
             />
           </AnimatedSection>
 
@@ -245,9 +248,9 @@ export default async function Home() {
                 time: p.readingTime, real: true,
               }))
               : [
-                { id: '1', title: 'Eğitimde yapay zekâ: Nereden başlamalı?', cat: 'AI Strategy', excerpt: '', slug: '', date: '', time: 0, real: false },
-                { id: '2', title: 'Optik okuma sistemlerinin evrimi', cat: 'Digital Efficiency', excerpt: '', slug: '', date: '', time: 0, real: false },
-                { id: '3', title: "BiSınıf'ın gelişim hikâyesi", cat: 'Build in Public', excerpt: '', slug: '', date: '', time: 0, real: false },
+                { id: '1', title: 'Eğitimde yapay zekâ: Nereden başlamalı?', cat: 'AI Strategy', excerpt: 'Yapay zekâ araçlarının eğitime entegrasyonu için pratik bir yol haritası.', slug: '', date: '', time: 5, real: false },
+                { id: '2', title: 'Optik okuma sistemlerinin evrimi', cat: 'Digital Efficiency', excerpt: 'Kâğıttan dijitale geçiş sürecinde optik okuma teknolojilerinin gelişimi.', slug: '', date: '', time: 4, real: false },
+                { id: '3', title: "BiSınıf'ın gelişim hikâyesi", cat: 'Build in Public', excerpt: 'Bir fikrin ürüne dönüşme serüveni ve öğrenilen dersler.', slug: '', date: '', time: 6, real: false },
               ]
             ).map(p => (
               <StaggerItem key={p.id}>
@@ -266,15 +269,16 @@ export default async function Home() {
                     </div>
                   </Link>
                 ) : (
-                  <div className="glass p-7 h-full flex flex-col">
-                    <span className="text-[10px] text-accent mb-3 block uppercase tracking-[0.15em] font-bold">{p.cat}</span>
-                    <h3 className="text-base font-semibold text-fg mb-3 leading-snug">{p.title}</h3>
-                    <div className="skeleton h-3 w-full mb-2" />
-                    <div className="skeleton h-3 w-full mb-2" />
-                    <div className="skeleton h-3 w-3/5" />
-                    <div className="flex items-center gap-4 text-xs text-subtle pt-4 mt-auto border-t border-card-border">
-                      <div className="skeleton h-3 w-24" />
-                      <div className="skeleton h-3 w-10" />
+                  /* Premium skeleton — shows real title + excerpt placeholder, not blank */
+                  <div className="glass p-7 h-full flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] text-accent mb-3 block uppercase tracking-[0.15em] font-bold">{p.cat}</span>
+                      <h3 className="text-base font-semibold text-fg mb-3 leading-snug">{p.title}</h3>
+                      <p className="text-sm text-muted leading-relaxed">{p.excerpt}</p>
+                    </div>
+                    <div className="flex items-center gap-4 text-xs text-subtle pt-4 mt-6 border-t border-card-border">
+                      <span className="skeleton h-3 w-20" />
+                      <span>{p.time} dk</span>
                     </div>
                   </div>
                 )}
@@ -286,7 +290,7 @@ export default async function Home() {
 
       <div className="section-divider" />
 
-      {/* ═══════════ FINAL CTA ═══════════ */}
+      {/* ═══════ FINAL CTA ═══════ */}
       <section className="relative z-[1] py-28 lg:py-36">
         <div className="section-shell">
           <AnimatedSection>

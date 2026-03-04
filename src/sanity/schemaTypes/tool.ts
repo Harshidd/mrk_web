@@ -4,6 +4,12 @@ export default defineType({
     name: 'tool',
     title: 'Micro Tool',
     type: 'document',
+    preview: {
+        select: { title: 'title', subtitle: 'status' },
+    },
+    orderings: [
+        { title: 'Yayın Tarihi', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
+    ],
     fields: [
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'slug', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() }),
@@ -21,6 +27,7 @@ export default defineType({
         defineField({ name: 'coverImage', type: 'image', options: { hotspot: true } }),
         defineField({ name: 'demoUrl', type: 'url' }),
         defineField({ name: 'requestLabel', type: 'string', initialValue: 'Talep Gönder' }),
+        defineField({ name: 'order', title: 'Sıra', type: 'number', description: 'Düşük sayı = önce gösterilir' }),
         defineField({ name: 'publishedAt', type: 'datetime' }),
     ],
 })

@@ -4,6 +4,12 @@ export default defineType({
     name: 'project',
     title: 'Project',
     type: 'document',
+    preview: {
+        select: { title: 'title', subtitle: 'category.title', media: 'coverImage' },
+    },
+    orderings: [
+        { title: 'Yayın Tarihi', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
+    ],
     fields: [
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'slug', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() }),
@@ -31,7 +37,8 @@ export default defineType({
         }),
         defineField({ name: 'gallery', type: 'array', of: [{ type: 'image' }] }),
         defineField({ name: 'featured', type: 'boolean', initialValue: false }),
-        defineField({ name: 'publishedAt', type: 'datetime' }),
+        defineField({ name: 'order', title: 'Sıra', type: 'number', description: 'Düşük sayı = önce gösterilir' }),
+        defineField({ name: 'publishedAt', type: 'datetime', validation: (Rule) => Rule.required() }),
         defineField({ name: 'ctaLabel', type: 'string' }),
         defineField({ name: 'ctaUrl', type: 'string' }),
     ],

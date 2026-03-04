@@ -3,37 +3,47 @@
 import { ReactNode, useEffect, useRef } from 'react'
 
 /**
- * V3 Multi-layer mesh background.
- * 
- * Layer 1 (.mesh-deep): 2 huge soft radial fields — pointer parallax max 8px, slow lerp
- * Layer 2 (.mesh-mid):  3 brighter mid blobs    — pointer parallax max 14px, faster lerp
- * Layer 3 (.mesh-vignette): edge focus gradient  — no parallax
- * + noise + dot grid
- * 
- * Each gradient layer has its own CSS animation at a different speed.
- * The JS parallax adds on top of that, with lerp for buttery 60fps.
+ * AuroraField — V3.5 multi-layer background with pointer spotlight.
+ *
+ * Layers:
+ *   .aurora-deep      — 2 huge washes, slow drift, pointer parallax (8px)
+ *   .aurora-mid       — 3 blobs, faster drift, pointer parallax (14px)
+ *   .aurora-spotlight  — radial glow that follows cursor (lerp)
+ *   .aurora-vignette   — edge focus
+ *   .aurora-noise      — grain
+ *   .aurora-dots       — dot grid
  */
 export function AuroraBackground({ children }: { children: ReactNode }) {
     const deepRef = useRef<HTMLDivElement>(null)
     const midRef = useRef<HTMLDivElement>(null)
+    const spotRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const deep = deepRef.current
         const mid = midRef.current
-        if (!deep || !mid) return
+        const spot = spotRef.current
+        if (!deep || !mid || !spot) return
 
         const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-        if (mq.matches) return
+        if (mq.matches) {
+            spot.style.display = 'none'
+            return
+        }
 
         let raf: number
         let tX = 0, tY = 0
         let dX = 0, dY = 0, mX = 0, mY = 0
+        let sX = 0, sY = 0
+        // Raw pixel coords for spotlight
+        let rawX = window.innerWidth / 2, rawY = window.innerHeight / 2
 
         const onMove = (e: MouseEvent) => {
             const nx = e.clientX / window.innerWidth - 0.5
             const ny = e.clientY / window.innerHeight - 0.5
             tX = nx
             tY = ny
+            rawX = e.clientX
+            rawY = e.clientY
         }
 
         const tick = () => {
@@ -46,6 +56,12 @@ export function AuroraBackground({ children }: { children: ReactNode }) {
             mX += (tX * 14 - mX) * 0.045
             mY += (tY * 14 - mY) * 0.045
             mid.style.transform = `translate(${mX}px, ${mY}px)`
+
+            // Spotlight: follow cursor with lerp
+            sX += (rawX - sX) * 0.06
+            sY += (rawY - sY) * 0.06
+            spot.style.left = `${sX}px`
+            spot.style.top = `${sY}px`
 
             raf = requestAnimationFrame(tick)
         }
@@ -60,12 +76,13 @@ export function AuroraBackground({ children }: { children: ReactNode }) {
     }, [])
 
     return (
-        <div className="mesh-root">
-            <div ref={deepRef} className="mesh-deep"><div /></div>
-            <div ref={midRef} className="mesh-mid"><div /></div>
-            <div className="mesh-vignette" />
-            <div className="mesh-noise" />
-            <div className="mesh-dots" />
+        <div className="aurora-root">
+            <div ref={deepRef} className="aurora-deep"><div /></div>
+            <div ref={midRef} className="aurora-mid"><div /></div>
+            <div ref={spotRef} className="aurora-spotlight" />
+            <div className="aurora-vignette" />
+            <div className="aurora-noise" />
+            <div className="aurora-dots" />
             {children}
         </div>
     )
