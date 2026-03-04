@@ -75,6 +75,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -91,6 +92,7 @@
     letter-spacing: -0.032em;
     line-height: 1.08;
     font-weight: 700;
+    text-wrap: balance;
   }
 }
 
@@ -247,7 +249,7 @@
   }
 }
 
-/* Section-local glow — add data-glow="blue|teal|violet|pink" to any section */
+/* Section-local fluid ribbon (Stripe style) */
 .section-glow {
   position: relative;
 }
@@ -255,43 +257,69 @@
 .section-glow::before {
   content: '';
   position: absolute;
-  width: 600px;
-  height: 400px;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.08;
+  width: 140%;
+  height: 800px;
+  border-radius: 50% / 100%;
+  filter: blur(140px) saturate(150%);
   pointer-events: none;
   z-index: 0;
+  left: -20%;
+  animation: stripe-fluid 28s ease-in-out infinite alternate;
+  opacity: 0.16;
+  background-size: 300% 300%;
 }
 
 .section-glow[data-glow="blue"]::before {
-  background: rgba(59, 130, 246, 1);
   top: -100px;
-  right: -100px;
+  background-image: linear-gradient(110deg, rgba(59, 130, 246, 1) 0%, rgba(139, 92, 246, 1) 40%, rgba(20, 184, 166, 1) 100%);
 }
 
 .section-glow[data-glow="teal"]::before {
-  background: rgba(20, 184, 166, 1);
-  top: -80px;
-  left: -80px;
+  top: 10%;
+  background-image: linear-gradient(110deg, rgba(20, 184, 166, 1) 0%, rgba(56, 189, 248, 1) 50%, rgba(99, 102, 241, 1) 100%);
+  animation-duration: 32s;
+  animation-direction: alternate-reverse;
 }
 
 .section-glow[data-glow="violet"]::before {
-  background: rgba(139, 92, 246, 1);
-  bottom: -80px;
-  right: -60px;
+  top: 20%;
+  background-image: linear-gradient(110deg, rgba(139, 92, 246, 1) 0%, rgba(236, 72, 153, 1) 50%, rgba(251, 191, 36, 1) 100%);
+  animation-duration: 24s;
 }
 
 .section-glow[data-glow="pink"]::before {
-  background: rgba(244, 114, 182, 1);
-  bottom: -100px;
-  left: -80px;
+  top: 15%;
+  background-image: linear-gradient(110deg, rgba(244, 114, 182, 1) 0%, rgba(251, 113, 133, 1) 60%, rgba(251, 191, 36, 1) 100%);
+  animation-duration: 34s;
+  animation-direction: alternate-reverse;
 }
 
 .section-glow[data-glow="amber"]::before {
-  background: rgba(251, 191, 36, 1);
-  top: 50%;
-  left: -100px;
+  top: 10%;
+  background-image: linear-gradient(110deg, rgba(251, 191, 36, 1) 0%, rgba(245, 158, 11, 1) 50%, rgba(239, 68, 68, 1) 100%);
+  animation-duration: 26s;
+}
+
+@keyframes stripe-fluid {
+  0% {
+    transform: translateY(-20px) translateX(-30px) rotate(-4deg) scale(1);
+    background-position: 0% 0%;
+  }
+
+  33% {
+    transform: translateY(50px) translateX(30px) rotate(2deg) scale(1.06);
+    background-position: 100% 50%;
+  }
+
+  66% {
+    transform: translateY(10px) translateX(-20px) rotate(-1deg) scale(1.10);
+    background-position: 50% 100%;
+  }
+
+  100% {
+    transform: translateY(-40px) translateX(40px) rotate(3deg) scale(0.95);
+    background-position: 100% 0%;
+  }
 }
 
 /* Backward compat */
@@ -614,6 +642,17 @@
   height: 2.5px;
   background: var(--color-accent);
   border-radius: 2px;
+}
+
+/* ═══════════════════ PREMIUM ICON HALO ═══════════════════ */
+.icon-halo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28%;
 }
 
 /* ═══════════════════ BADGE ═══════════════════ */

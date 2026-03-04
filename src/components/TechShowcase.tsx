@@ -70,8 +70,8 @@ export function DashboardMock() {
                             className="flex-1 rounded-md"
                             initial={{ height: 0 }}
                             whileInView={{ height: `${v}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.5 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.8, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
                             style={{ background: `linear-gradient(to top, rgba(13,148,136,0.4), rgba(13,148,136,0.08))` }}
                         />
                     ))}
@@ -140,14 +140,32 @@ export function CodePanel({ lines }: { lines?: string[] }) {
                 <span className="ml-3 text-[10px] text-slate-500 font-medium">scanner.ts</span>
             </div>
             <div className="p-5 overflow-x-auto">
-                {code.map((line, i) => (
-                    <div key={i} className={`flex gap-4 ${i === 1 ? 'code-line-highlight' : ''}`}>
-                        <span className="text-slate-600 select-none w-4 text-right shrink-0 text-[11px]">{i + 1}</span>
-                        <span className={colorize(line, i)}>
-                            {line || '\u00A0'}
-                        </span>
-                    </div>
-                ))}
+                <motion.div
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={{
+                        hidden: {},
+                        show: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } }
+                    }}
+                >
+                    {code.map((line, i) => (
+                        <motion.div
+                            key={i}
+                            variants={{
+                                hidden: { opacity: 0, x: -10 },
+                                show: { opacity: 1, x: 0 }
+                            }}
+                            transition={{ duration: 0.5 }}
+                            className={`flex gap-4 ${i === 1 ? 'code-line-highlight' : ''}`}
+                        >
+                            <span className="text-slate-600 select-none w-4 text-right shrink-0 text-[11px]">{i + 1}</span>
+                            <span className={colorize(line, i)}>
+                                {line || '\u00A0'}
+                            </span>
+                        </motion.div>
+                    ))}
+                </motion.div>
             </div>
         </motion.div>
     )
@@ -158,9 +176,9 @@ export function CodePanel({ lines }: { lines?: string[] }) {
    ─────────────────────────────────────── */
 export function MetricStrip() {
     const metrics = [
-        { icon: Activity, label: 'Yanıt süresi', value: 42, suffix: 'ms', color: 'text-blue-500', bg: 'bg-blue-500/10' },
-        { icon: Zap, label: 'Günlük işlem', value: 1240, suffix: '+', color: 'text-amber-500', bg: 'bg-amber-500/10' },
-        { icon: Shield, label: 'Sistem uptime', value: 99, suffix: '.9%', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+        { icon: Activity, label: 'Yanıt süresi', value: 42, suffix: 'ms', color: 'text-blue-500', bg: 'icon-halo' },
+        { icon: Zap, label: 'Günlük işlem', value: 1240, suffix: '+', color: 'text-amber-500', bg: 'icon-halo' },
+        { icon: Shield, label: 'Sistem uptime', value: 99, suffix: '.9%', color: 'text-emerald-500', bg: 'icon-halo' },
     ]
 
     return (
@@ -224,8 +242,8 @@ export function WorkflowStrip() {
                     >
                         <div className="flex flex-col items-center text-center">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold mb-2 transition-all ${s.active
-                                    ? 'bg-accent text-white shadow-lg shadow-accent/20'
-                                    : 'bg-surface border border-card-border text-muted'
+                                ? 'bg-accent text-white shadow-lg shadow-accent/20'
+                                : 'icon-halo text-muted'
                                 }`}>
                                 {s.active ? <CheckCircle2 size={16} /> : s.num}
                             </div>

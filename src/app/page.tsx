@@ -59,7 +59,7 @@ export default async function Home() {
             <div className="relative">
               <DashboardMock />
               <div className="absolute -bottom-6 -left-4 glass p-3.5 px-5 hidden lg:flex items-center gap-3" style={{ borderRadius: 16 }}>
-                <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                <div className="w-9 h-9 rounded-full icon-halo flex items-center justify-center text-accent">
                   <CheckCircle2 size={16} />
                 </div>
                 <div>
@@ -93,11 +93,13 @@ export default async function Home() {
                     { title: 'Otomatik Raporlama', desc: 'Kurum ve veli raporlarını tek tıkla oluşturma' },
                   ]
                 ).map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 py-3 border-b border-card-border last:border-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 shrink-0" />
-                    <div>
-                      <span className="text-sm font-semibold text-fg">{item.title}</span>
-                      <span className="text-sm text-muted ml-2">{item.desc}</span>
+                  <div key={i} className="glass glass-interactive border-beam p-5 flex items-center gap-5 mt-4">
+                    <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                      {i === 0 ? <BookOpen size={20} /> : i === 1 ? <Layers size={20} /> : <FileCode2 size={20} />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-fg mb-0.5">{item.title}</h3>
+                      <p className="text-[13px] text-muted truncate">{item.desc}</p>
                     </div>
                   </div>
                 ))}
