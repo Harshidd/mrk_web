@@ -18,9 +18,8 @@ export function Footer({ settings }: { settings: SiteSettings | null }) {
                     <div>
                         <h3 className="text-[11px] font-bold text-subtle uppercase tracking-[0.15em] mb-5">Sayfalar</h3>
                         <ul className="space-y-3 text-sm text-muted">
-                            <li><Link href="/uzmanlik" className="hover:text-fg transition-colors duration-300">Eğitim Teknolojileri</Link></li>
-                            <li><Link href="/araclar" className="hover:text-fg transition-colors duration-300">Öğretmen ve Geliştirici Araçları</Link></li>
                             <li><Link href="/projeler" className="hover:text-fg transition-colors duration-300">Projeler</Link></li>
+                            <li><Link href="/araclar" className="hover:text-fg transition-colors duration-300">Araçlar</Link></li>
                             <li><Link href="/yazilar" className="hover:text-fg transition-colors duration-300">Yazılar</Link></li>
                             <li><Link href="/hakkimda" className="hover:text-fg transition-colors duration-300">Hakkımda</Link></li>
                         </ul>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Activity, Zap, Shield, CheckCircle2 } from 'lucide-react'
+import { Activity, Zap, Shield, CheckCircle2, BarChart2, Scan, FileText, LayoutDashboard } from 'lucide-react'
 
 /* ───────────────────────────────────────
    Animated Counter — count-up on scroll
@@ -43,17 +43,20 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
 export function DashboardMock() {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 28, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1.16 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="glass border-beam p-6 md:p-8 space-y-5"
-            style={{ borderRadius: 28 }}
+            className="glass glass-interactive border-beam p-6 md:p-8 space-y-5 transform transition-all duration-500 hover:-translate-y-1 origin-right lg:mr-4"
+            style={{
+                borderRadius: 28,
+                boxShadow: '0 12px 40px -10px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)'
+            }}
         >
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-[10px] text-subtle uppercase tracking-[0.15em] font-semibold mb-1">Sınav Performans Paneli</p>
-                    <p className="text-xl font-bold text-fg">BiSınıf Analitik</p>
+                    <p className="text-[10px] text-subtle uppercase tracking-[0.15em] font-semibold mb-1">Öğrenci ve Sınav Analitiği</p>
+                    <p className="text-xl font-bold text-fg">Eğitim Veri Paneli</p>
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] text-subtle uppercase tracking-[0.15em] font-semibold">Ortalama Başarı</p>
@@ -257,5 +260,42 @@ export function WorkflowStrip() {
                 ))}
             </div>
         </motion.div>
+    )
+}
+
+/* ───────────────────────────────────────
+   HeroCards — Floating capacity cards
+   ─────────────────────────────────────── */
+export function HeroCards() {
+    const cards = [
+        { label: 'Sınav Analizi', icon: BarChart2, color: 'text-blue-500', delay: 0 },
+        { label: 'Optik Okuma', icon: Scan, color: 'text-emerald-500', delay: 0.2 },
+        { label: 'PDF Raporlama', icon: FileText, color: 'text-rose-500', delay: 0.4 },
+        { label: 'Kurum Dashboard', icon: LayoutDashboard, color: 'text-amber-500', delay: 0.6 }
+    ]
+
+    return (
+        <div className="grid grid-cols-2 gap-4 lg:gap-6 relative w-full max-w-lg mx-auto">
+            {cards.map((card, i) => (
+                <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: card.delay, ease: [0.16, 1, 0.3, 1] }}
+                    className={`glass glass-interactive border-beam p-6 lg:p-8 flex flex-col justify-center items-center text-center cursor-default ${i % 2 === 1 ? 'mt-10' : ''}`}
+                >
+                    <motion.div
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 5 + i, delay: i * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="flex flex-col items-center"
+                    >
+                        <div className={`w-14 h-14 rounded-2xl icon-halo mb-5 flex items-center justify-center ${card.color}`}>
+                            <card.icon size={26} strokeWidth={1.5} />
+                        </div>
+                        <span className="font-bold text-[15px] text-fg tracking-tight">{card.label}</span>
+                    </motion.div>
+                </motion.div>
+            ))}
+        </div>
     )
 }

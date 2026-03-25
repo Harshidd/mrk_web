@@ -51,9 +51,9 @@
 
 /* ═══════════════════ KNOBS ═══════════════════ */
 :root {
-  --mesh-opacity: 0.12;
-  --mesh-speed-a: 60s;
-  --mesh-speed-b: 38s;
+  --mesh-opacity: 0.22;
+  --mesh-speed-a: 40s;
+  --mesh-speed-b: 36s;
   --noise-opacity: 0.04;
   --dot-opacity: 0.022;
   --spotlight-size: 550;
@@ -322,6 +322,20 @@
   }
 }
 
+@keyframes light-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Backward compat */
 .mesh-root,
 .mesh-bg,
@@ -523,7 +537,7 @@
     0 1px 3px rgba(0, 0, 0, 0.12),
     0 6px 20px rgba(15, 23, 42, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -545,8 +559,8 @@
 }
 
 .btn-glow:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10), 0 10px 32px rgba(15, 23, 42, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 16px 40px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-glow:active {

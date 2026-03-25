@@ -8,9 +8,8 @@ import { usePathname } from 'next/navigation'
 
 const links = [
     { href: '/', label: 'Anasayfa' },
-    { href: '/uzmanlik', label: 'Eğitim Teknolojileri' },
-    { href: '/araclar', label: 'Öğretmen ve Geliştirici Araçları' },
     { href: '/projeler', label: 'Projeler' },
+    { href: '/araclar', label: 'Araçlar' },
     { href: '/yazilar', label: 'Yazılar' },
     { href: '/hakkimda', label: 'Hakkımda' },
 ]
@@ -57,8 +56,8 @@ export function Navbar({ navCtas }: NavbarProps) {
                 </Link>
 
                 {/* Desktop */}
-                <div className="hidden lg:flex items-center gap-7">
-                    <div className="flex gap-5 text-[13px]">
+                <div className="hidden lg:flex items-center gap-8">
+                    <div className="flex gap-7 text-[14px]">
                         {links.map(l => (
                             <Link key={l.href} href={l.href}
                                 className={`nav-link py-1 ${isActive(l.href) ? 'active text-fg font-medium' : 'text-muted hover:text-fg'}`}>
@@ -67,7 +66,7 @@ export function Navbar({ navCtas }: NavbarProps) {
                         ))}
                     </div>
                     <Link ref={ctaRef} href={navCtas?.primaryUrl || '/iletisim'}
-                        className="btn-glow text-[13px] px-6 py-2.5" style={{ transition: 'transform 0.15s ease-out, box-shadow 0.35s ease, background 0.35s ease' }}>
+                        className="btn-glow text-[14px] px-6 py-2.5" style={{ transition: 'transform 0.15s ease-out, box-shadow 0.35s ease, background 0.35s ease' }}>
                         {navCtas?.primaryLabel || 'İletişime Geç'}
                     </Link>
                 </div>
