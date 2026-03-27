@@ -7,15 +7,17 @@ import { AuroraBackground } from '@/components/AuroraBackground'
 import { client } from '@/lib/sanity/client'
 import { getSettingsQuery } from '@/lib/sanity/queries'
 import { SiteSettings } from '@/types/content'
+import { mergeSettings } from '@/lib/data/fallbackSettings'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: { template: '%s | MRKDESIGN', default: 'MRKDESIGN — Eğitim ve Yapay Zekâ Odaklı Sistemler' },
-  description: 'Eğitim kurumlarında karşılaşılan karmaşayı sadeleştiren dijital sistemler.',
+  title: { template: '%s | MRKDEV', default: 'MRKDEV — Eğitim ve Yapay Zekâ Odaklı Sistemler' },
+  description: 'Eğitim odaklı dijital sistemler, mini araçlar ve veri odaklı üretim notları.',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings: SiteSettings | null = await client.fetch(getSettingsQuery).catch(() => null)
+  const cmsSettings: SiteSettings | null = await client.fetch(getSettingsQuery).catch(() => null)
+  const settings = mergeSettings(cmsSettings)
 
   return (
     <html lang="tr">

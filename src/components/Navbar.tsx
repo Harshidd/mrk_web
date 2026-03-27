@@ -52,7 +52,7 @@ export function Navbar({ navCtas }: NavbarProps) {
         <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'nav-glass' : 'bg-transparent'}`}>
             <div className="section-shell h-[72px] flex items-center justify-between">
                 <Link href="/" className="text-lg font-bold tracking-tight text-fg hover:opacity-80 transition-opacity">
-                    MRK<span className="text-subtle font-normal">DESIGN</span>
+                    MRK<span className="text-subtle font-normal">DEV</span>
                 </Link>
 
                 {/* Desktop */}

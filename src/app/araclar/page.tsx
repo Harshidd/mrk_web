@@ -14,56 +14,7 @@ export const metadata: Metadata = {
 }
 export const revalidate = 60
 
-const fallbackTools = [
-    { 
-        _id: 'ft-1', 
-        slug: { current: 'sinav-sablonu' },
-        title: 'Sınav Şablonu Oluşturucu', 
-        summary: 'Optik okumaya uygun sınav kağıtları hazırlamayı kolaylaştıran yardımcı araç.',
-        status: 'Aktif',
-        tags: ['Öğretmen', 'PDF']
-    },
-    { 
-        _id: 'ft-2', 
-        slug: { current: 'not-donusturucu' },
-        title: 'Not Dönüştürücü', 
-        summary: 'Ham puanları farklı ölçeklere ve yüzdelik dilimlere dönüştürmeye yardımcı araç.',
-        status: 'Aktif',
-        tags: ['Öğretmen', 'Verimlilik']
-    },
-    { 
-        _id: 'ft-3', 
-        slug: { current: 'rubrik-editoru' },
-        title: 'Dijital Rubrik Editörü', 
-        summary: 'Performans değerlendirme kriterleri oluşturmayı kolaylaştıran dijital rubrik aracı.',
-        status: 'Yakında',
-        tags: ['Öğretmen', 'AI']
-    },
-    { 
-        _id: 'ft-4', 
-        slug: { current: 'pdf-excel' },
-        title: 'PDF / Excel Yardımcıları', 
-        summary: 'Belge düzenleme, veri dışa aktarma ve temel raporlama süreçlerini hızlandıran mini araçlar.',
-        status: 'Aktif',
-        tags: ['Verimlilik', 'PDF']
-    },
-    { 
-        _id: 'ft-5', 
-        slug: { current: 'snippet-araclari' },
-        title: 'Snippet Yardımcıları', 
-        summary: 'Tekrarlanan geliştirme işlerini hızlandırmak için hazır küçük kod parçaları ve yardımcı araçlar.',
-        status: 'Aktif',
-        tags: ['Geliştirici', 'BTY']
-    },
-    { 
-        _id: 'ft-6', 
-        slug: { current: 'prompt-araclari' },
-        title: 'Prompt Yardımcıları', 
-        summary: 'Yapay zekâ araçları için daha düzenli ve etkili prompt üretimini destekleyen yardımcı yapı.',
-        status: 'Aktif',
-        tags: ['AI', 'Verimlilik']
-    }
-]
+import { fallbackTools } from '@/lib/data/fallbackTools'
 
 export default async function ToolsPage() {
     let rawTools: Tool[] = await client.fetch(listToolsQuery).catch(() => [])
@@ -77,7 +28,7 @@ export default async function ToolsPage() {
                         <div className="eyebrow">Mini Sistemler</div>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-[-0.035em] text-fg mb-7 leading-[1.06]">Araçlar</h1>
                         <p className="text-lg text-muted leading-relaxed max-w-lg mb-8">
-                            Öğretmenler, geliştiriciler ve dijital üretim süreçleri için hazırlanan küçük ama işlevli araçlar. Bu alanda sınav şablonları, not dönüştürücüler, rubrik editörleri, PDF/Excel yardımcıları, snippet araçları ve prompt destekleri gibi pratik çözümler yer alır.
+                            Günlük iş akışını kolaylaştıran, eğitimde ve dijital üretimde kullanılabilecek küçük ama işlevli araçlar.
                         </p>
                     </AnimatedSection>
                     <AnimatedSection delay={0.2} className="lg:order-1">
@@ -90,7 +41,7 @@ export default async function ToolsPage() {
                 <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {tools.map((tool: any) => {
                         const isFallback = tool._id.startsWith('ft-')
-                        const currentTags = isFallback ? tool.tags : (tool.tags || [tool.category?.title || 'Araç'])
+                        const currentTags = isFallback ? tool.tags : (tool.tags || tool.forWhom || ['Araç'])
                         const isActive = tool.status === 'Aktif' || tool.status === 'Active'
 
                         // Dynamic icon assigner based on text matching for aesthetics
@@ -102,14 +53,14 @@ export default async function ToolsPage() {
 
                         return (
                             <StaggerItem key={tool._id}>
-                                <div className="group block h-full">
+                                <Link href={`/araclar/${tool.slug.current}`} className="group block h-full">
                                     <div className="glass glass-interactive border-beam p-7 h-full flex flex-col relative rounded-3xl cursor-pointer">
                                         <div className="flex items-center justify-between mb-6">
                                             <div className="w-11 h-11 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-500">
                                                 <DynamicIcon name={iconName} />
                                             </div>
                                             <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                                                {currentTags.slice(0, 2).map((t: string) => (
+                                                {currentTags.slice(0, 3).map((t: string) => (
                                                     <span key={t} className="text-[9px] px-2 py-1 rounded-md bg-surface border border-card-border text-subtle font-bold tracking-widest uppercase">
                                                         {t}
                                                     </span>
@@ -126,13 +77,10 @@ export default async function ToolsPage() {
                                         <p className="text-sm text-muted leading-relaxed flex-1">{tool.summary}</p>
                                         <div className="mt-8 pt-5 border-t border-card-border/60 flex items-center justify-between text-xs text-subtle group-hover:text-fg transition-colors">
                                             <span className="font-semibold text-fg">Aracı İncele</span>
-                                            {tool.demoUrl
-                                                ? <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                                : <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                                            }
+                                            <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             </StaggerItem>
                         )
                     })}

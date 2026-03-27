@@ -9,7 +9,7 @@ export function Footer({ settings }: { settings: SiteSettings | null }) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-14">
                     <div>
                         <h2 className="text-lg font-bold tracking-tight mb-4 text-fg">
-                            MRK<span className="text-subtle font-normal">DESIGN</span>
+                            MRK<span className="text-subtle font-normal">DEV</span>
                         </h2>
                         <p className="text-muted text-sm leading-relaxed max-w-xs">
                             {settings?.siteDescription || 'Eğitim ve yapay zekâ odaklı dijital sistemler.'}
@@ -40,7 +40,7 @@ export function Footer({ settings }: { settings: SiteSettings | null }) {
                 </div>
                 <div className="flex flex-col md:flex-row justify-between items-center text-xs text-subtle pt-8 border-t border-card-border">
                     <div className="flex items-center gap-6 mb-4 md:mb-0">
-                        <p>&copy; {new Date().getFullYear()} {settings?.siteTitle || 'MRKDESIGN'}. Tüm hakları saklıdır.</p>
+                        <p>&copy; {new Date().getFullYear()} {settings?.siteTitle || 'MRKDEV'}. Tüm hakları saklıdır.</p>
                         <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-card-border">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                             <span className="text-[10px] font-medium tracking-wide">All systems normal</span>

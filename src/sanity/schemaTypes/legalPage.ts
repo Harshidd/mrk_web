@@ -2,11 +2,11 @@ import { defineType, defineField } from 'sanity'
 
 export default defineType({
     name: 'legalPage',
-    title: 'Legal Page',
+    title: 'Sabit Sayfalar',
     type: 'document',
     fields: [
-        defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
-        defineField({ name: 'slug', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() }),
-        defineField({ name: 'body', type: 'array', of: [{ type: 'block' }] }),
+        defineField({ name: 'title', title: 'Başlık', type: 'string', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() }),
+        defineField({ name: 'body', title: 'İçerik', type: 'array', of: [{ type: 'block' }] }),
     ],
 })

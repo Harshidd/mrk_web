@@ -11,11 +11,12 @@ import { SectionHeader } from '@/components/SectionHeader'
 import { DashboardMock, MetricStrip, WorkflowStrip } from '@/components/TechShowcase'
 import { urlForImage } from '@/lib/sanity/image'
 import type { SiteSettings, SolutionCategory, Project, Tool, Post } from '@/types/content'
+import { mergeSettings } from '@/lib/data/fallbackSettings'
 
 export const revalidate = 60
 
 export default async function Home() {
-  const [settings, categories, projects, tools, posts] = await Promise.all([
+  const [cmsSettings, categories, projects, tools, posts] = await Promise.all([
     client.fetch<SiteSettings>(getSettingsQuery).catch(() => null),
     client.fetch<SolutionCategory[]>(listCategoriesQuery).catch(() => []),
     client.fetch<Project[]>(listProjectsQuery).catch(() => []),
@@ -23,6 +24,7 @@ export default async function Home() {
     client.fetch<Post[]>(listPostsQuery).catch(() => []),
   ])
 
+  const settings = mergeSettings(cmsSettings)
   const homeProjects = (projects.filter(p => p.featured).length >= 2
     ? projects.filter(p => p.featured) : projects).slice(0, 4)
   const homeTools = tools.slice(0, 3)
@@ -39,20 +41,20 @@ export default async function Home() {
             <AnimatedSection>
               <div className="badge-pill mb-8">
                 <span className="badge-dot" />
-                Eğitim + Yapay Zekâ
+                {settings.homeHero?.heroTagline}
               </div>
               <h1 className="text-4xl lg:text-[2.35rem] font-bold tracking-[-0.02em] text-fg leading-[1.15] mb-6 max-w-[500px]">
-                Eğitimde ve günlük işlerde karmaşayı azaltan <br className="hidden sm:block" />küçük ama güçlü dijital sistemler kuruyorum.
+                {settings.homeHero?.headline}
               </h1>
               <p className="text-lg text-muted leading-relaxed mb-10 max-w-[60ch]">
-                Öğretmen kökenli bir geliştiriciyim. Okullar ve ekipler için veri analizi, sınav sistemleri ve yapay zekâ destekli araçlar geliştiriyorum.
+                {settings.homeHero?.subheadline}
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <Link href={settings?.homeHero?.primaryCtaUrl || '/projeler'} className="btn-glow px-8 py-4 text-sm">
-                  Projeleri İncele
+                <Link href={settings.homeHero?.primaryCtaUrl || '/projeler'} className="btn-glow px-8 py-4 text-sm">
+                  {settings.homeHero?.primaryCtaLabel}
                 </Link>
-                <Link href={settings?.homeHero?.secondaryCtaUrl || '/iletisim'} className="btn-ghost group text-sm">
-                  İletişime Geç
+                <Link href={settings.homeHero?.secondaryCtaUrl || '/iletisim'} className="btn-ghost group text-sm">
+                  {settings.homeHero?.secondaryCtaLabel}
                   <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
@@ -94,14 +96,13 @@ export default async function Home() {
                 slug: p.slug.current, image: p.coverImage, real: true,
               }))
               : [
-                { id: '1', title: 'BiSınıf — Sınav Analiz Platformu', cat: 'EdTech', summary: 'Optik okuma tabanlı sınav analiz ve raporlama sistemi.', slug: '', image: null, real: false },
-                { id: '2', title: 'Optik Motor', cat: 'Altyapı', summary: 'Yüksek doğruluklu otomatik tarama altyapısı.', slug: '', image: null, real: false },
-                { id: '3', title: 'VakitHane', cat: 'Verimlilik', summary: 'Zaman ve kişisel düzen amaçlı verimlilik aracı.', slug: '', image: null, real: false },
-                { id: '4', title: 'VOLO', cat: 'Dil Eğitimi', summary: 'Konuşma odaklı AI destekli dil pratiği konsepti.', slug: '', image: null, real: false },
+                { id: '1', title: 'BiSınıf — Sınav Analiz Platformu', cat: 'Eğitim Teknolojileri', summary: 'Optik okuma tabanlı sınav analiz ve raporlama sistemi. Okullar için veriyi görünür kılar.', slug: 'bisinif', image: null, real: false },
+                { id: '2', title: 'VakitHane', cat: 'Verimlilik', summary: 'Namaz vakitleri, meditasyon ve günlük rutin takibi için tasarlanmış verimlilik aracı.', slug: 'vakithane', image: null, real: false },
+                { id: '3', title: 'VOLO', cat: 'Dil Eğitimi', summary: 'Konuşma ve kelime odaklı yapay zekâ destekli dil pratiği uygulaması.', slug: 'volo', image: null, real: false },
               ]
             ).map(p => (
               <StaggerItem key={p.id}>
-                {p.real ? (
+                {p.slug ? (
                   <Link href={`/projeler/${p.slug}`} className="group block h-full">
                     <div className="glass glass-interactive border-beam p-5 h-full flex flex-col">
                       <div className="aspect-[16/10] rounded-xl overflow-hidden mb-5 bg-surface/50 relative">
@@ -144,15 +145,15 @@ export default async function Home() {
               <SectionHeader
                 eyebrow="Mini Sistemler"
                 title="Araçlar"
-                subtitle="Günlük iş akışını hızlandıran küçük ama işlevli mini araçlar."
+                subtitle="Günlük iş akışını kolaylaştıran, eğitimde ve dijital üretimde kullanılabilecek küçük ama işlevli araçlar."
               />
               <div className="space-y-3 mb-10">
                 {(homeTools.length > 0
-                  ? homeTools.map(t => ({ title: t.title, desc: t.summary, status: t.status }))
+                  ? homeTools.map((t: any) => ({ title: t.title, desc: t.summary, status: t.status }))
                   : [
-                    { title: 'Sınav Şablonu Oluşturucu', desc: 'Optik okumaya uygun sınav kâğıtları ve hazır formlar.', status: 'Active' as const },
-                    { title: 'Not Dönüştürücü', desc: 'Ham puanları farklı ölçeklere hızlıca çeviren araç.', status: 'Active' as const },
-                    { title: 'Dijital Rubrik Editörü', desc: 'Performans değerlendirme kriterleri için düzenleyici.', status: 'ComingSoon' as const },
+                    { title: 'Sınav Şablonu Oluşturucu', desc: 'Optik okumaya ve düzenli sınav hazırlığına uygun şablonlar.', status: 'Yakında' },
+                    { title: 'Not Dönüştürücü', desc: 'Ham puanları farklı ölçeklere hızlıca çeviren araç.', status: 'Yakında' },
+                    { title: 'Prompt Yardımcıları', desc: 'Yapay zekâ araçları için düzenli prompt yapıları oluşturma.', status: 'Yakında' },
                   ]
                 ).map((item, i) => (
                   <div key={i} className="glass glass-interactive border-beam p-5 flex items-center gap-4">
@@ -192,7 +193,7 @@ export default async function Home() {
           <AnimatedSection>
             <SectionHeader
               eyebrow="Blog" title="Yazılar"
-              subtitle="Eğitim, yapay zekâ ve dijital üretim süreçleri üzerine notlar ve içgörüler."
+              subtitle="Yapay zekâ, dijital verimlilik, eğitim teknolojileri ve üretim süreçleri üzerine notlar."
               action={<Link href="/yazilar" className="btn-ghost group text-sm">Tümünü oku <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" /></Link>}
             />
           </AnimatedSection>
@@ -206,9 +207,9 @@ export default async function Home() {
                 time: p.readingTime, real: true,
               }))
               : [
-                { id: '1', title: 'Eğitimde yapay zekâ: Nereden başlamalı?', cat: 'Genel', excerpt: 'Yapay zekâ araçlarının eğitime entegrasyonu için pratik bir yol haritası.', slug: '', date: '', time: 5, real: false },
-                { id: '2', title: 'Optik okuma sistemlerinin evrimi', cat: 'Altyapı', excerpt: 'Kâğıttan dijitale geçiş sürecinde optik okuma teknolojilerinin gelişimi.', slug: '', date: '', time: 4, real: false },
-                { id: '3', title: "BiSınıf'ın gelişim hikâyesi", cat: 'Ürün', excerpt: 'Bir fikrin ürüne dönüşme serüveni ve süreçten çıkarılan dersler.', slug: '', date: '', time: 6, real: false },
+                { id: 'fp-1', title: 'Eğitimde yapay zekâ ile nereden başlanmalı?', cat: 'Yapay Zekâ', excerpt: 'Yapay zekâ araçlarını eğitime dahil ederken ilk adımı doğru seçmek neden önemlidir?', slug: 'egitimde-yapay-zeka-ile-nereden-baslanmali', date: '', time: 5, real: true },
+                { id: 'fp-2', title: 'Sınav analizi neden sadece not ortalaması değildir?', cat: 'Eğitim Teknolojileri', excerpt: 'Sınav verisi sadece başarı sıralaması değil, öğrenme sürecini anlamak için de önemli bir kaynaktır.', slug: 'sinav-analizi-neden-sadece-not-ortalamasi-degildir', date: '', time: 6, real: true },
+                { id: 'fp-3', title: 'Küçük dijital araçlar neden büyük fark yaratır?', cat: 'Dijital Verimlilik', excerpt: 'Büyük sistemler kadar, küçük ve doğru tasarlanmış araçlar da iş akışını ciddi şekilde değiştirebilir.', slug: 'kucuk-dijital-araclar-neden-buyuk-fark-yaratir', date: '', time: 5, real: true },
               ]
             ).map(p => (
               <StaggerItem key={p.id}>
@@ -255,12 +256,12 @@ export default async function Home() {
                               Bilgi Notu
                           </span>
                           <h2 className="text-xl md:text-2xl font-bold tracking-[-0.02em] text-fg mb-0 leading-[1.3]">
-                              Eğitimde veri odaklı sistemler neden önemli?
+                              Sistem ve veri odaklı düşünmek neden önemli?
                           </h2>
                       </div>
                       <div className="flex-[1.1] md:pt-1">
                           <p className="text-[13.5px] md:text-[14.5px] text-muted leading-relaxed mb-6">
-                              Sınav sonuçları, öğrenci gelişimi ve sınıf içi süreçler çoğu zaman dağınık veri olarak kalır. Doğru kurgulanmış dijital sistemler; veriyi görünür hale getirir, öğretmenin karar yükünü azaltır ve okul içindeki süreçleri daha anlaşılır kılar. Bu sitede yer alan projeler, araçlar ve yazılar bu yaklaşımın farklı örneklerini gösterir.
+                              İş süreçleri, öğrenci gelişimi veya ekiplerin üretimi çoğu zaman anlık çözümlerle ilerler ve dağınık bir veri yığınına dönüşür. Sağlam kurgulanmış dijital sistemler; karmaşayı giderir, veriyi görünür hale getirir ve gereksiz karar yükünü azaltır. Bu sitede yer alan projeler, araçlar ve yazılar bu yaklaşımın hem eğitimde hem de dijital üretim alanlarındaki farklı örneklerini yansıtır.
                           </p>
                           <Link href="/projeler" className="btn-ghost group text-[13px] inline-flex tracking-wide">
                               Projeleri incele <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />

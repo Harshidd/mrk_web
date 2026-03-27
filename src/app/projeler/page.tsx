@@ -72,9 +72,14 @@ export default async function ProjectsPage() {
                 _id: `fallback-${slug}`,
                 slug: { current: slug, _type: 'slug' },
                 title: h.title,
-                category: { title: h.cat, _type: 'reference', _ref: 'ref', _id: 'ref', _createdAt: '', _updatedAt: '', _rev: '' },
-                summary: h.summary
-            } as Project)
+                category: { title: h.cat, _type: 'reference', _ref: 'ref', _id: 'ref', _createdAt: '', _updatedAt: '', _rev: '' } as any,
+                summary: h.summary,
+                coverImage: undefined as any,
+                publishedAt: new Date().toISOString(),
+                techStack: h.technology || [],
+                results: [] as any,
+                featured: false
+            } as unknown as Project)
         }
     })
 
@@ -161,7 +166,7 @@ export default async function ProjectsPage() {
                                             <div className="mt-auto pt-2">
                                                 <span className="text-[10px] text-subtle uppercase tracking-[0.15em] font-bold block mb-2.5">Teknoloji</span>
                                                 <div className="flex flex-wrap gap-1.5">
-                                                    {pTech.map((t, i) => (
+                                                    {(pTech as string[]).map((t: string, i: number) => (
                                                         <span key={i} className="px-2 py-1 bg-surface-variant/40 text-muted rounded-md text-[10px] font-medium border border-card-border/30 backdrop-blur-md">{t}</span>
                                                     ))}
                                                 </div>
